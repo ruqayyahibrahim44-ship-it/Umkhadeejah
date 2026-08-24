@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UmKhadeejah</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7f5;color:#18221e}
+header{background:#123c2f;color:#fff;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5}.logo{font-size:24px;font-weight:800}
+nav{display:flex;flex-wrap:wrap}.btn{border:0;border-radius:9px;padding:10px 14px;margin:3px;font-weight:700;cursor:pointer}.gold{background:#f2b84b}.white{background:#fff;color:#123c2f}.dark{background:#123c2f;color:#fff}.outline{background:transparent;color:#fff;border:1px solid #ffffff88}
+.hero{background:#123c2f;color:#fff;text-align:center;padding:48px 18px}.hero h1{font-size:38px;margin:0 0 10px}.hero p{font-size:18px}
+main{max-width:1100px;margin:auto;padding:25px 16px}.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}.card{background:#fff;border:1px solid #e1e7e3;border-radius:14px;padding:17px;box-shadow:0 3px 14px #0000000a}.category{text-align:center;cursor:pointer}.emoji{font-size:30px}.tag{display:inline-block;background:#e8f4ee;color:#176044;padding:5px 8px;border-radius:20px;font-size:12px}.price{font-size:21px;font-weight:800;color:#123c2f}.status{padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold;background:#e8f4ee;color:#176044}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cbd5d0;border-radius:9px;margin:5px 0 12px;font-size:15px}textarea{min-height:105px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.search{display:grid;grid-template-columns:2fr 1fr;gap:10px}.notice{padding:12px;background:#fff5d7;border-radius:9px;margin:10px 0}table{width:100%;border-collapse:collapse}td,th{padding:9px;border-bottom:1px solid #e1e7e3;text-align:left}
+footer{background:#10271f;color:#fff;text-align:center;padding:25px;margin-top:30px}@media(max-width:650px){.hero h1{font-size:30px}.row,.search{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="logo">UmKhadeejah</div><nav>
+<button class="btn outline" onclick="page('home')">Home</button>
+<button class="btn outline" onclick="page('jobs')">Find Jobs</button>
+<button class="btn gold" onclick="page('post')">Post Job</button>
+<button class="btn white" onclick="page('account')">Account</button>
+<button class="btn white" onclick="page('admin')">Admin</button>
+</nav></header>
+
+<section class="hero"><h1>Find Work • Hire Talent</h1><p>Simple and trusted marketplace for clients and freelancers.</p>
+<button class="btn gold" onclick="page('jobs')">Find Jobs</button>
+<button class="btn white" onclick="page('post')">Post a Job</button></section>
+
+<main>
+<section id="home" class="page active"><h2>Browse Categories</h2><div id="cats" class="grid"></div><h2>Available Jobs</h2><div id="homeJobs" class="grid"></div></section>
+
+<section id="jobs" class="page"><h2>Find Jobs</h2><div class="card search"><input id="search" placeholder="Search jobs..." oninput="renderJobs()"><select id="filter" onchange="renderJobs()"></select></div><br><div id="jobList" class="grid"></div></section>
+
+<section id="post" class="page"><h2>Post a Job</h2><div class="card"><form id="form">
+<label>Job title</label><input id="title" required>
+<label>Category</label><select id="jobCat"></select>
+<label>Description</label><textarea id="desc" required></textarea>
+<div class="row"><div><label>Budget (₦)</label><input id="budget" type="number" min="500" required></div><div><label>Deadline</label><input id="deadline" type="date" required></div></div>
+<button class="btn gold">Submit Job</button></form><div id="msg"></div></div></section>
+
+<section id="account" class="page"><h2>Account</h2><div class="grid"><div class="card"><h3>Freelancer</h3><p>Demo verified account</p><div class="price" id="earn">₦0</div><small>Total released earnings</small></div><div class="card"><h3>My Jobs</h3><div id="myJobs">No accepted jobs yet.</div></div></div></section>
+
+<section id="admin" class="page"><h2>Admin Dashboard</h2><div class="grid"><div class="card"><h3>Total Jobs</h3><div class="price" id="total">0</div></div><div class="card"><h3>Pending</h3><div class="price" id="pendingCount">0</div></div><div class="card"><h3>Fees</h3><div class="price" id="fees">₦0</div></div></div><h3>Job Review</h3><div class="card" id="adminJobs"></div><h3>Payments</h3><div class="card" id="payments">No payments yet.</div><h3>Disputes</h3><div class="card" id="disputes">No disputes.</div></section>
+</main><footer>© 2026 UmKhadeejah</footer>
+
+<script>
+const C=[["🎬","AI Video"],["🎨","Graphic Design"],["✍️","Writing"],["🌍","Translation"],["🎙️","Voice-over"],["📱","Social Media"],["💻","Website Design"],["📊","Data Entry"],["📝","Transcription"],["🤖","AI Data Tasks"],["📸","Photo Editing"],["📢","Digital Marketing"],["🛍️","Product Listing"],["📄","CV/Resume"],["🔎","Research"],["👩🏽‍💼","Virtual Assistant"]];
+let J=[
+["Create a 30-second AI product video","AI Video",10000,"Create a polished short product video.","2026-09-01"],
+["English to Hausa translation","Translation",5000,"Translate a short document into natural Hausa.","2026-08-29"],
+["Design 3 social media posts","Graphic Design",7500,"Create three promotional designs.","2026-08-31"],
+["Write product descriptions","Writing",12000,"Write descriptions for online products.","2026-09-03"],
+["Hausa audio transcription","Transcription",6000,"Transcribe a short Hausa audio.","2026-08-30"],
+["Remove photo backgrounds","Photo Editing",9000,"Remove backgrounds from product photos.","2026-09-02"]
+].map((x,i)=>({id:i+1,title:x[0],cat:x[1],budget:x[2],desc:x[3],deadline:x[4],status:"Open",accepted:false}));
+let PAY=[],DIS=[];
+
+function $(x){return document.getElementById(x)}
+function money(n){return "₦"+Number(n).toLocaleString("en-NG")}
+function page(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");if(id=="jobs")renderJobs();if(id=="account")renderAccount();if(id=="admin")renderAdmin();scrollTo(0,0)}
+function makeCard(j){return `<div class="card"><span class="tag">${j.cat}</span> <span class="status">${j.status}</span><h3>${j.title}</h3><p>${j.desc}</p><div class="price">${money(j.budget)}</div><p>Deadline: ${j.deadline}</p>${j.status=="Open"?`<button class="btn gold" onclick="accept(${j.id})">I Can Do This Job</button>`:""}</div>`}
+function renderHome(){$("cats").innerHTML=C.map(x=>`<div class="card category" onclick="page('jobs');$('filter').value='${x[1]}';renderJobs()"><div class="emoji">${x[0]}</div><b>${x[1]}</b></div>`).join("");$("homeJobs").innerHTML=J.filter(x=>x.status=="Open").map(makeCard).join("")}
+function renderJobs(){let q=$("search").value.toLowerCase(),f=$("filter").value;let a=J.filter(x=>x.status=="Open"&&x.title.toLowerCase().includes(q)&&(!f||x.cat==f));$("jobList").innerHTML=a.length?a.map(makeCard).join(""):"<div class='card'>No jobs found.</div>"}
+function accept(id){let j=J.find(x=>x.id==id);j.status="Assigned";j.accepted=true;PAY.push({id,gross:j.budget,fee:Math.round(j.budget*.1),worker:Math.round(j.budget*.9),status:"Secured"});alert("Job accepted.");renderHome();renderAccount();renderAdmin()}
+function renderAccount(){let a=J.filter(x=>x.accepted);$("earn").textContent=money(PAY.filter(p=>p.status=="Released").reduce((s,p)=>s+p.worker,0));$("myJobs").innerHTML=a.length?a.map(j=>`<div class="card"><b>${j.title}</b><p>${money(j.budget)} — ${j.status}</p>${j.status=="Assigned"?`<button class="btn gold" onclick="submitWork(${j.id})">Submit Work</button>`:""}${j.status=="Submitted"?`<button class="btn gold" onclick="approve(${j.id})">Client Approves</button>`:""}${j.status!="Completed"&&j.status!="Disputed"?`<button class="btn white" onclick="dispute(${j.id})">Dispute</button>`:""}</div>`).join(""):"No accepted jobs yet."}
+function submitWork(id){J.find(x=>x.id==id).status="Submitted";renderAccount();renderAdmin()}
+function approve(id){let j=J.find(x=>x.id==id);j.status="Completed";let p=PAY.find(x=>x.id==id);if(p)p.status="Released";renderAccount();renderAdmin()}
+function dispute(id){let j=J.find(x=>x.id==id);j.status="Disputed";DIS.push(id);renderAccount();renderAdmin()}
+$("form").onsubmit=e=>{e.preventDefault();J.unshift({id:Date.now(),title:$("title").value,cat:$("jobCat").value,budget:Number($("budget").value),desc:$("desc").value,deadline:$("deadline").value,status:"Pending Review",accepted:false});$("msg").innerHTML='<div class="notice">Job submitted for admin review.</div>';e.target.reset();renderHome();renderAdmin()}
+function renderAdmin(){$("total").textContent=J.length;$("pendingCount").textContent=J.filter(x=>x.status=="Pending Review").length;$("fees").textContent=money(PAY.reduce((s,p)=>s+p.fee,0));$("adminJobs").innerHTML=J.map(j=>`<p><b>${j.title}</b> — ${money(j.budget)} — ${j.status} ${j.status=="Pending Review"?`<button class="btn gold" onclick="approveJob(${j.id})">Approve</button>`:""}</p>`).join("");$("payments").innerHTML=PAY.length?PAY.map(p=>`Job #${p.id}: ${money(p.gross)} | Freelancer ${money(p.worker)} | Fee ${money(p.fee)} | ${p.status}`).join("<hr>"):"No payments yet.";$("disputes").innerHTML=DIS.length?DIS.map(x=>"Job #"+x+" — Open").join("<br>"):"No disputes."}
+function approveJob(id){J.find(x=>x.id==id).status="Open";renderHome();renderAdmin()}
+$("jobCat").innerHTML=C.map(x=>`<option>${x[1]}</option>`).join("");$("filter").innerHTML='<option value="">All categories</option>'+C.map(x=>`<option>${x[1]}</option>`).join("");renderHome();renderAdmin();
+</script>
+</body>
+</html>
