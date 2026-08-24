@@ -1,1 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UmKhadeejah</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7f6;color:#17222b}
+header{background:#123c2f;color:white;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:10px}.logo{font-size:24px;font-weight:800}
+nav{display:flex;flex-wrap:wrap}.btn{border:0;border-radius:9px;padding:11px 15px;margin:3px;font-weight:700;cursor:pointer}.gold{background:#f2b84b}.white{background:white;color:#123c2f}.outline{background:transparent;color:white;border:1px solid #ffffff88}
+.hero{background:#123c2f;color:white;text-align:center;padding:55px 18px}.hero h1{font-size:38px;margin:0 0 12px}.hero p{font-size:18px}
+main{max-width:1050px;margin:auto;padding:28px 16px}.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:white;border-radius:14px;padding:18px;border:1px solid #e5e9e7;box-shadow:0 3px 15px #0000000a}.category{text-align:center;cursor:pointer}.emoji{font-size:30px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccd5d1;border-radius:9px;margin:5px 0 12px}textarea{min-height:100px}.price{font-size:20px;font-weight:bold;color:#123c2f}.tag{background:#eaf5ef;color:#176044;border-radius:20px;padding:5px 8px;font-size:12px}
+footer{background:#10271f;color:white;text-align:center;padding:25px;margin-top:30px}@media(max-width:650px){.hero h1{font-size:30px}}
+</style>
+</head>
+<body>
+<header><div class="logo">UmKhadeejah</div><nav>
+<button class="btn outline" onclick="show('home')">Home</button>
+<button class="btn outline" onclick="show('jobs')">Find Jobs</button>
+<button class="btn gold" onclick="show('post')">Post Job</button>
+<button class="btn white" onclick="show('account')">Account</button>
+<button class="btn white" onclick="show('admin')">Admin</button>
+</nav></header>
 
+<section class="hero"><h1>Find Work • Hire Talent</h1><p>Simple jobs marketplace for clients and freelancers.</p>
+<button class="btn gold" onclick="show('jobs')">Find Jobs</button>
+<button class="btn white" onclick="show('post')">Post a Job</button></section>
+
+<main>
+<section id="home" class="page active">
+<h2>Categories</h2><div id="categories" class="grid"></div>
+<h2>Available Jobs</h2><div id="homeJobs" class="grid"></div>
+</section>
+
+<section id="jobs" class="page">
+<h2>Find Jobs</h2>
+<div class="card"><input id="search" placeholder="Search jobs..." oninput="renderJobs()"><select id="catFilter" onchange="renderJobs()"><option value="">All categories</option></select></div>
+<div id="jobList" class="grid"></div>
+</section>
+
+<section id="post" class="page">
+<h2>Post a Job</h2><div class="card"><form id="postForm">
+<label>Job title</label><input id="title" required>
+<label>Category</label><select id="category"></select>
+<label>Description</label><textarea id="description" required></textarea>
+<label>Budget (₦)</label><input id="budget" type="number" required>
+<label>Deadline</label><input id="deadline" type="date" required>
+<button class="btn gold">Submit Job</button></form><p id="posted"></p></div>
+</section>
+
+<section id="account" class="page">
+<h2>Account</h2><div class="card"><h3>Freelancer Account</h3><p>My Jobs</p><div id="myJobs"></div><p class="price">Earnings: ₦0</p></div>
+</section>
+
+<section id="admin" class="page">
+<h2>Admin</h2><div class="card"><h3>Pending Jobs</h3><div id="pending"></div></div>
+</section>
+</main>
+<footer>© 2026 UmKhadeejah</footer>
+
+<script>
+const categories=[
+["🎬","AI Video"],["🎨","Graphic Design"],["✍️","Writing"],["🌍","Translation"],
+["🎙️","Voice-over"],["📱","Social Media"],["💻","Website Design"],["📊","Data Entry"],
+["📝","Transcription"],["🤖","AI Data Tasks"],["📸","Photo Editing"],["📢","Digital Marketing"],
+["🛍️","Product Listing"],["📄","CV/Resume"],["🔎","Research"],["👩🏽‍💼","Virtual Assistant"]
+];
+
+let jobs=[
+{title:"Create a 30-second AI product video",cat:"AI Video",budget:10000,desc:"Create a polished short product video.",deadline:"2026-09-01",status:"Open"},
+{title:"English to Hausa translation",cat:"Translation",budget:5000,desc:"Translate a short document into natural Hausa.",deadline:"2026-08-29",status:"Open"},
+{title:"Design 3 social media posts",cat:"Graphic Design",budget:7500,desc:"Create three promotional designs.",deadline:"2026-08-31",status:"Open"},
+{title:"Write product descriptions",cat:"Writing",budget:12000,desc:"Write descriptions for online products.",deadline:"2026-09-03",status:"Open"},
+{title:"Hausa audio transcription",cat:"Transcription",budget:6000,desc:"Transcribe a short Hausa audio.",deadline:"2026-08-30",status:"Open"},
+{title:"Remove photo backgrounds",cat:"Photo Editing",budget:9000,desc:"Remove backgrounds from product photos.",deadline:"2026-09-02",status:"Open"}
+];
+
+const $=id=>document.getElementById(id);
+function show(id){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ $(id).classList.add("active");
+ if(id==="jobs")renderJobs();
+ if(id==="account")renderAccount();
+ if(id==="admin")renderAdmin();
+ scrollTo(0,0);
+}
+function card(j,i){
+ return `<div class="card"><span class="tag">${j.cat}</span><h3>${j.title}</h3><p>${j.desc}</p><div class="price">₦${Number(j.budget).toLocaleString()}</div><p>Deadline: ${j.deadline}</p><button class="btn gold" onclick="takeJob(${i})">I Can Do This Job</button></div>`;
+}
+function renderHome(){$("homeJobs").innerHTML=jobs.filter(j=>j.status==="Open").map(card).join("")}
+function renderJobs(){
+ let q=$("search").value.toLowerCase(),c=$("catFilter").value;
+ let a=jobs.filter(j=>j.status==="Open"&&j.title.toLowerCase().includes(q)&&(!c||j.cat===c));
+ $("jobList").innerHTML=a.length?a.map((j)=>card(j,jobs.indexOf(j))).join(""):"<div class='card'>No jobs found.</div>";
+}
+function takeJob(i){jobs[i].status="Assigned";alert("You selected this job. The real payment and submission system will be connected before launch.");renderHome();renderAccount()}
+function renderAccount(){let a=jobs.filter(j=>j.status==="Assigned");$("myJobs").innerHTML=a.length?a.map(j=>`<div class="card"><b>${j.title}</b><p>₦${Number(j.budget).toLocaleString()} — ${j.status}</p><button class="btn gold" onclick="submitJob('${j.title}')">Submit Work</button></div>`).join(""):"No job accepted yet."}
+function submitJob(t){alert("Work submission page will be connected in the production version for file upload and client approval.")}
+function renderAdmin(){
+ let p=jobs.filter(j=>j.status==="Pending Review");
+ $("pending").innerHTML=p.length?p.map((j,i)=>`<p><b>${j.title}</b> — ₦${j.budget} <button class="btn gold" onclick="approve(${jobs.indexOf(j)})">Approve</button></p>`).join(""):"No pending jobs.";
+}
+function approve(i){jobs[i].status="Open";renderAdmin();renderHome()}
+$("postForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ jobs.unshift({title:$("title").value,cat:$("category").value,budget:Number($("budget").value),desc:$("description").value,deadline:$("deadline").value,status:"Pending Review"});
+ $("posted").textContent="Job submitted. It is waiting for admin review.";
+ e.target.reset();renderAdmin();
+});
+$("categories").innerHTML=categories.map(c=>`<div class="card category" onclick="show('jobs');$('catFilter').value='${c[1]}';renderJobs()"><div class="emoji">${c[0]}</div><b>${c[1]}</b></div>`).join("");
+$("category").innerHTML=categories.map(c=>`<option>${c[1]}</option>`).join("");
+$("catFilter").innerHTML='<option value="">All categories</option>'+categories.map(c=>`<option>${c[1]}</option>`).join("");
+renderHome();renderAdmin();
+</script>
+</body>
+</html>
